@@ -1,1 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Adventure Planner</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fafaf9; /* Stone 50 */
+            color: #44403c; /* Stone 700 */
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
 
+        .active-tab {
+            border-bottom: 2px solid #ea580c; /* Orange 600 */
+            color: #ea580c;
+            font-weight: 600;
+        }
+
+        .inactive-tab {
+            color: #78716c; /* Stone 500 */
+        }
+        
+        .inactive-tab:hover {
+            color: #ea580c;
+        }
+
+        /* Card hover effects */
+        .interactive-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals (Stone/Beige) with Burnt Orange (Torii Gate) and Deep Indigo accents. -->
+    <!-- Application Structure Plan: Dashboard layout with top navigation tabs. 
+         1. 'Itinerary': Interactive timeline and bar chart for time allocation. 
+         2. 'Experiences': Card grid for culture (Ryokan, Onsen, etc.). 
+         3. 'Cuisine': Filterable food guide with a fun 'Flavor Distribution' chart. 
+         4. 'Logistics': Budget calculator, currency info, and pie chart for cost breakdown. 
+         This structure splits the report's linear sections into task-oriented views for better planning. -->
+    <!-- Visualization & Content Choices: 
+         - Bar Chart (Chart.js): Visualizing suggested days per city to give structure to the '2 weeks'.
+         - Pie Chart (Chart.js): Breakdown of estimated budget categories to visualize cost distribution.
+         - Doughnut Chart (Chart.js): Culinary goal variety.
+         - Interactive lists and cards: To handle the qualitative text about packing and etiquette.
+         - Currency Converter: Functional JS tool for the Budget section.
+         - Confirming NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-stone-800 tracking-tight">🇯🇵 Japan<span class="text-orange-600">Plan</span></span>
+                </div>
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <button onclick="app.switchTab('itinerary')" id="nav-itinerary" class="active-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Itinerary</button>
+                    <button onclick="app.switchTab('experiences')" id="nav-experiences" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Experiences</button>
+                    <button onclick="app.switchTab('cuisine')" id="nav-cuisine" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Cuisine</button>
+                    <button onclick="app.switchTab('logistics')" id="nav-logistics" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Logistics</button>
+                </nav>
+                <!-- Mobile Menu Button (simplified interaction for single file) -->
+                <div class="md:hidden">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-stone-500 hover:text-stone-900 focus:outline-none">
+                        Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="app.switchTab('itinerary'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Itinerary</button>
+                <button onclick="app.switchTab('experiences'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Experiences</button>
+                <button onclick="app.switchTab('cuisine'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Cuisine</button>
+                <button onclick="app.switchTab('logistics'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Logistics</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- INTRO HERO -->
+        <div id="app-intro" class="mb-8 text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl font-extrabold text-stone-900 mb-4">Your Two-Week Golden Route</h1>
+            <p class="text-lg text-stone-600">
+                Welcome to your interactive planner. Based on your "Golden Route" itinerary, this tool helps you explore the balance between modern cities and traditional culture. Navigate through the tabs to visualize your time, plan your meals, and prepare your logistics.
+            </p>
+        </div>
+
+        <!-- VIEW: ITINERARY -->
+        <div id="view-itinerary" class="block space-y-8 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Text Content -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h2 class="text-2xl font-bold text-stone-800 mb-4 border-l-4 border-orange-500 pl-3">The Journey Loop</h2>
+                        <p class="text-stone-600 mb-6">
+                            This journey follows a north-to-south loop of Honshu's primary cities, utilizing the Shinkansen for efficiency. Explore the key stops below:
+                        </p>
+                        
+                        <!-- Interactive City Selector -->
+                        <div class="space-y-4">
+                            <!-- City Cards injected by JS -->
+                            <div id="itinerary-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 h-full">
+                        <h3 class="text-lg font-semibold text-stone-800 mb-2">Time Allocation Recommendation</h3>
+                        <p class="text-sm text-stone-500 mb-6">Suggested breakdown of your 14 days to balance sightseeing and travel.</p>
+                        
+                        <!-- CHART CONTAINER -->
+                        <div class="chart-container">
+                            <canvas id="itineraryChart"></canvas>
+                        </div>
+                        
+                        <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-800 text-sm mb-1">🚄 Travel Tip</h4>
+                            <p class="text-xs text-blue-700">The <strong>Shinkansen</strong> connects these hubs. A 14-day JR Pass is recommended for seamless travel between Tokyo, Kyoto, Osaka, and Hiroshima/Day Trips.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: EXPERIENCES -->
+        <div id="view-experiences" class="hidden space-y-8">
+            <div class="max-w-4xl mx-auto text-center mb-8">
+                <h2 class="text-3xl font-bold text-stone-900">Cultural Immersion & Experiences</h2>
+                <p class="mt-2 text-stone-600">The trip prioritizes hands-on cultural moments. Click on the cards below to uncover the essential activities identified in your report.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="experience-grid">
+                <!-- Experience Cards Injected JS -->
+            </div>
+
+            <!-- Etiquette Section -->
+            <div class="bg-indigo-50 rounded-2xl p-8 mt-8">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-indigo-900">🇯🇵 Essential Etiquette</h3>
+                        <p class="text-indigo-700">Respect the local customs to deepen your connection.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <div class="text-2xl mb-2">👟</div>
+                        <h4 class="font-bold text-gray-900">Footwear</h4>
+                        <p class="text-gray-600">Always remove shoes at temple interiors, Ryokans, and private homes. Look for the designated genkan area.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <div class="text-2xl mb-2">💴</div>
+                        <h4 class="font-bold text-gray-900">Tipping</h4>
+                        <p class="text-gray-600"><strong>Do not tip.</strong> Excellent service is the standard. Tipping can be confusing or considered rude.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <div class="text-2xl mb-2">🤫</div>
+                        <h4 class="font-bold text-gray-900">Public Silence</h4>
+                        <p class="text-gray-600">Keep your voice down on public transport. Avoid phone calls on trains.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: CUISINE -->
+        <div id="view-cuisine" class="hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Menu / List -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h2 class="text-2xl font-bold text-stone-800 mb-6 border-l-4 border-red-500 pl-3">Culinary Goals</h2>
+                        <p class="text-stone-600 mb-6">From street food to refined sushi, here is your checklist of must-try flavors.</p>
+                        
+                        <!-- Food Filters -->
+                        <div class="flex space-x-2 mb-6 overflow-x-auto pb-2">
+                            <button onclick="app.filterFood('all')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-full text-sm font-semibold transition">All</button>
+                            <button onclick="app.filterFood('Noodle')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-full text-sm font-semibold transition">Noodles</button>
+                            <button onclick="app.filterFood('Street Food')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-full text-sm font-semibold transition">Street Food</button>
+                            <button onclick="app.filterFood('Seafood')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 rounded-full text-sm font-semibold transition">Seafood</button>
+                        </div>
+
+                        <!-- Food Grid -->
+                        <div id="food-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h3 class="text-lg font-semibold text-stone-800 mb-2">Dining Style Mix</h3>
+                        <p class="text-sm text-stone-500 mb-6">Balance your meals between quick bites and sit-down experiences.</p>
+                        
+                        <!-- CHART CONTAINER -->
+                        <div class="chart-container">
+                            <canvas id="foodChart"></canvas>
+                        </div>
+                        
+                        <div class="mt-6 border-t pt-4">
+                             <h4 class="font-bold text-stone-800 text-sm mb-2">Legend:</h4>
+                             <ul class="text-sm space-y-1 text-stone-600">
+                                 <li>🍜 <span class="font-semibold">Noodles:</span> Quick, hearty lunches.</li>
+                                 <li>🐙 <span class="font-semibold">Street Food:</span> Casual evening snacks (Osaka).</li>
+                                 <li>🍣 <span class="font-semibold">Seafood:</span> Fresh, often raw delicacies.</li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: LOGISTICS -->
+        <div id="view-logistics" class="hidden space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Budgeting Tool -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h2 class="text-xl font-bold text-stone-800 mb-4 flex items-center">
+                        <span class="bg-green-100 text-green-700 p-2 rounded-full mr-3">💷</span> 
+                        Budget Converter
+                    </h2>
+                    <p class="text-stone-600 text-sm mb-6">
+                        Use the current favorable exchange rate to estimate your spending power. 
+                        <br><span class="text-xs text-stone-400">Rate: £1 = ¥206.82</span>
+                    </p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">British Pounds (£)</label>
+                            <input type="number" id="gbp-input" placeholder="e.g. 100" class="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition" oninput="app.convertCurrency()">
+                        </div>
+                        <div class="flex justify-center text-stone-400">
+                            <span>⬇️</span>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Japanese Yen (¥)</label>
+                            <div id="jpy-output" class="w-full p-3 bg-stone-50 border border-stone-200 rounded-lg text-stone-800 font-mono font-bold text-lg">
+                                ¥ 0
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                        <h4 class="text-yellow-800 font-bold text-sm">💡 Cash is King</h4>
+                        <p class="text-yellow-700 text-xs mt-1">Remember that many smaller shops, temples, and restaurants still only accept cash (Yen). Always carry sufficient notes.</p>
+                    </div>
+                </div>
+
+                <!-- Packing Checklist -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h2 class="text-xl font-bold text-stone-800 mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-700 p-2 rounded-full mr-3">🎒</span> 
+                        Packing Essentials
+                    </h2>
+                    <p class="text-stone-600 text-sm mb-6">Key items mentioned in your summary for smooth travel.</p>
+                    
+                    <ul class="space-y-3" id="packing-list">
+                        <!-- JS injected -->
+                    </ul>
+                </div>
+
+                <!-- Budget Viz -->
+                <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h3 class="text-lg font-bold text-stone-800 mb-4">Estimated Budget Distribution</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-around">
+                        <div class="chart-container" style="max-height: 250px; max-width: 400px;">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                        <div class="mt-6 md:mt-0 max-w-sm">
+                            <p class="text-sm text-stone-600">
+                                This chart illustrates a typical budget breakdown for a mid-range traveler. Note that the <strong>JR Pass</strong> is a significant upfront transport cost, while accommodation and food will vary by city.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">Generated for your Japan Adventure Planning. &copy; 2025</p>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        const app = {
+            state: {
+                currentTab: 'itinerary',
+                exchangeRate: 206.82,
+                itineraryData: [
+                    { 
+                        city: "Tokyo", 
+                        days: 5,
+                        tags: ["Modernity", "Pop Culture", "Nightlife"],
+                        desc: "Shibuya Crossing, Meiji Jingu Shrine, Senso-ji Temple, Shinjuku (Golden Gai). The electric capital." 
+                    },
+                    { 
+                        city: "Kyoto", 
+                        days: 5,
+                        tags: ["Tradition", "History", "Arts"],
+                        desc: "Fushimi Inari Taisha (Torii Gates), Kinkaku-ji (Golden Pavilion), Arashiyama Bamboo Grove, Gion District." 
+                    },
+                    { 
+                        city: "Osaka", 
+                        days: 2,
+                        tags: ["Food", "Entertainment"],
+                        desc: "Dotonbori for street food, Osaka Castle. The kitchen of Japan." 
+                    },
+                    { 
+                        city: "Day Trips", 
+                        days: 2,
+                        tags: ["Nature", "History"],
+                        desc: "Nara Park (Deer & Todai-ji), Hakone or Kawaguchiko (Mt Fuji views)." 
+                    }
+                ],
+                experiences: [
+                    { title: "Ryokan Stay", icon: "🛌", desc: "Sleep on tatami mats and enjoy traditional hospitality.", type: "Accommodation" },
+                    { title: "Onsen", icon: "♨️", desc: "Relax in a natural hot spring bath (naked, gender-separated).", type: "Wellness" },
+                    { title: "Tea Ceremony", icon: "🍵", desc: "Participate in a meditative matcha preparation ritual.", type: "Arts" },
+                    { title: "Gion District", icon: "👘", desc: "Observe Geisha/Maiko culture in Kyoto's historic streets.", type: "Arts" }
+                ],
+                food: [
+                    { name: "Ramen", type: "Noodle", desc: "Wheat noodles in broth (Miso, Tonkotsu, Shoyu).", icon: "🍜" },
+                    { name: "Udon", type: "Noodle", desc: "Thick, chewy wheat noodles, often in simple broth.", icon: "🍲" },
+                    { name: "Takoyaki", type: "Street Food", desc: "Octopus balls, savory and hot. Best in Osaka.", icon: "🐙" },
+                    { name: "Okonomiyaki", type: "Street Food", desc: "Savory pancake with cabbage and toppings.", icon: "🥞" },
+                    { name: "Sushi", type: "Seafood", desc: "Vinegared rice with raw fish toppings.", icon: "🍣" },
+                    { name: "Sashimi", type: "Seafood", desc: "Fresh, thinly sliced raw fish without rice.", icon: "🐟" }
+                ],
+                packing: [
+                    { item: "Japan Rail Pass", note: "Purchase before arrival or online" },
+                    { item: "Type A Power Adapter", note: "2-pin flat blades (US style)" },
+                    { item: "Slip-on Shoes", note: "Essential for frequent removal at temples" },
+                    { item: "Comfortable Layers", note: "For walking and changing weather" },
+                    { item: "Cash (Yen)", note: "Stock up at 7-Eleven ATMs" }
+                ]
+            },
+
+            init: function() {
+                this.renderItinerary();
+                this.renderExperiences();
+                this.renderFood(this.state.food); // Initial render all
+                this.renderPacking();
+                this.initCharts();
+            },
+
+            switchTab: function(tabName) {
+                // Hide all views
+                document.querySelectorAll('[id^="view-"]').forEach(el => {
+                    el.classList.add('hidden');
+                    el.classList.remove('block');
+                });
+                
+                // Show selected view
+                const view = document.getElementById(`view-${tabName}`);
+                view.classList.remove('hidden');
+                view.classList.add('block');
+                view.classList.add('animate-fade-in');
+
+                // Update Nav States
+                document.querySelectorAll('nav button').forEach(btn => {
+                    btn.classList.remove('active-tab');
+                    btn.classList.add('inactive-tab');
+                });
+                const activeBtn = document.getElementById(`nav-${tabName}`);
+                if(activeBtn) {
+                    activeBtn.classList.remove('inactive-tab');
+                    activeBtn.classList.add('active-tab');
+                }
+            },
+
+            renderItinerary: function() {
+                const container = document.getElementById('itinerary-list');
+                container.innerHTML = this.state.itineraryData.map(dest => `
+                    <div class="interactive-card bg-stone-50 p-4 rounded-lg border-l-4 border-stone-300 hover:border-orange-500 hover:bg-white transition-all duration-200">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg text-stone-800">${dest.city}</h3>
+                            <span class="text-xs font-semibold bg-stone-200 text-stone-600 px-2 py-1 rounded-full">~${dest.days} Days</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-2 mb-2">
+                            ${dest.tags.map(tag => `<span class="text-[10px] uppercase tracking-wider bg-orange-100 text-orange-700 px-2 py-0.5 rounded">${tag}</span>`).join('')}
+                        </div>
+                        <p class="text-sm text-stone-600 mt-2">${dest.desc}</p>
+                    </div>
+                `).join('');
+            },
+
+            renderExperiences: function() {
+                const container = document.getElementById('experience-grid');
+                container.innerHTML = this.state.experiences.map(exp => `
+                    <div class="interactive-card bg-white p-6 rounded-xl border border-stone-200 text-center flex flex-col items-center h-full">
+                        <div class="text-4xl mb-4 p-4 bg-stone-50 rounded-full w-20 h-20 flex items-center justify-center">${exp.icon}</div>
+                        <h4 class="font-bold text-lg text-stone-800 mb-2">${exp.title}</h4>
+                        <span class="text-xs uppercase font-bold text-stone-400 mb-3 tracking-wide">${exp.type}</span>
+                        <p class="text-sm text-stone-600">${exp.desc}</p>
+                    </div>
+                `).join('');
+            },
+
+            filterFood: function(type) {
+                const filtered = type === 'all' 
+                    ? this.state.food 
+                    : this.state.food.filter(f => f.type === type);
+                this.renderFood(filtered);
+            },
+
+            renderFood: function(data) {
+                const container = document.getElementById('food-grid');
+                container.innerHTML = data.map(item => `
+                    <div class="interactive-card flex items-center p-3 bg-stone-50 rounded-lg border border-transparent hover:border-red-200 hover:bg-red-50 transition">
+                        <span class="text-3xl mr-4">${item.icon}</span>
+                        <div>
+                            <h4 class="font-bold text-stone-800">${item.name}</h4>
+                            <p class="text-xs text-stone-500">${item.desc}</p>
+                            <span class="text-[10px] text-red-500 font-semibold uppercase mt-1 inline-block">${item.type}</span>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            renderPacking: function() {
+                const container = document.getElementById('packing-list');
+                container.innerHTML = this.state.packing.map((item, index) => `
+                    <li class="flex items-start cursor-pointer group" onclick="this.classList.toggle('opacity-50')">
+                        <div class="flex-shrink-0 h-5 w-5 border border-stone-300 rounded mr-3 mt-0.5 flex items-center justify-center group-hover:border-blue-400">
+                            <div class="h-3 w-3 bg-blue-500 rounded-sm opacity-0 group-hover:opacity-20 transition"></div>
+                        </div>
+                        <div>
+                            <p class="text-stone-800 font-medium">${item.item}</p>
+                            <p class="text-xs text-stone-500">${item.note}</p>
+                        </div>
+                    </li>
+                `).join('');
+            },
+
+            convertCurrency: function() {
+                const input = document.getElementById('gbp-input').value;
+                const output = document.getElementById('jpy-output');
+                if (input) {
+                    const result = (input * this.state.exchangeRate).toLocaleString('ja-JP', { style: 'currency', currency: 'JPY' });
+                    output.innerText = result;
+                    output.classList.add('text-green-700');
+                } else {
+                    output.innerText = "¥ 0";
+                    output.classList.remove('text-green-700');
+                }
+            },
+
+            initCharts: function() {
+                // Itinerary Chart (Days distribution)
+                const ctxItinerary = document.getElementById('itineraryChart').getContext('2d');
+                new Chart(ctxItinerary, {
+                    type: 'bar',
+                    data: {
+                        labels: this.state.itineraryData.map(d => d.city),
+                        datasets: [{
+                            label: 'Suggested Days',
+                            data: this.state.itineraryData.map(d => d.days),
+                            backgroundColor: ['#f97316', '#ea580c', '#c2410c', '#9a3412'], // Oranges
+                            borderRadius: 6,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { 
+                                backgroundColor: '#fff', 
+                                titleColor: '#44403c', 
+                                bodyColor: '#44403c', 
+                                borderColor: '#e7e5e4', 
+                                borderWidth: 1,
+                                callbacks: { label: (c) => `${c.raw} Days` } 
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, display: false },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+
+                // Food Chart (Pie)
+                const ctxFood = document.getElementById('foodChart').getContext('2d');
+                new Chart(ctxFood, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Noodles (Lunch)', 'Street Food (Snacks)', 'Seafood (Dinner)'],
+                        datasets: [{
+                            data: [40, 30, 30],
+                            backgroundColor: ['#fca5a5', '#f87171', '#ef4444'], // Reds
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { usePointStyle: true, font: {size: 10} } }
+                        }
+                    }
+                });
+
+                // Budget Chart (Pie)
+                const ctxBudget = document.getElementById('budgetChart').getContext('2d');
+                new Chart(ctxBudget, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Transport (JR Pass)', 'Accommodation', 'Food & Dining', 'Activities/Misc'],
+                        datasets: [{
+                            data: [25, 35, 30, 10], // Estimated breakdown
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right', labels: { boxWidth: 12, padding: 15 } }
+                        }
+                    }
+                });
+            }
+        };
+
+        // Initialize on load
+        window.onload = function() {
+            app.init();
+        };
+    </script>
+</body>
+</html>
