@@ -79,10 +79,11 @@
                 </div>
                 <!-- Navigation -->
                 <nav class="hidden md:flex space-x-8">
+                    <button onclick="app.switchTab('logistic')" id="nav-logistic" class="active-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Logistic</button>
                     <button onclick="app.switchTab('itinerary')" id="nav-itinerary" class="active-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Itinerary</button>
-                    <button onclick="app.switchTab('experiences')" id="nav-experiences" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Experiences</button>
-                    <button onclick="app.switchTab('cuisine')" id="nav-cuisine" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Cuisine</button>
-                    <button onclick="app.switchTab('logistics')" id="nav-logistics" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Logistics</button>
+                    <button onclick="app.switchTab('cultural-tips')" id="nav-cultural" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Cultural Tips</button>
+                    <button onclick="app.switchTab('checklist')" id="nav-checklist" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Checklist</button>
+                    <button onclick="app.switchTab('budget')" id="nav-budget" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Budget</button>
                 </nav>
                 <!-- Mobile Menu Button (simplified interaction for single file) -->
                 <div class="md:hidden">
@@ -95,10 +96,11 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
             <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="app.switchTab('logistic'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Logistic</button>
                 <button onclick="app.switchTab('itinerary'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Itinerary</button>
-                <button onclick="app.switchTab('experiences'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Experiences</button>
-                <button onclick="app.switchTab('cuisine'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Cuisine</button>
-                <button onclick="app.switchTab('logistics'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Logistics</button>
+                <button onclick="app.switchTab('cultural-tips'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Cultural Tips</button>
+                <button onclick="app.switchTab('checklist'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Checklist</button>
+                <button onclick="app.switchTab('budget'); document.getElementById('mobile-menu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Budget</button>
             </div>
         </div>
     </header>
@@ -106,14 +108,67 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         
-        <!-- INTRO HERO -->
+        <!-- INTRO HERO
         <div id="app-intro" class="mb-8 text-center max-w-3xl mx-auto">
             <h1 class="text-4xl font-extrabold text-stone-900 mb-4">Your Two-Week Golden Route</h1>
             <p class="text-lg text-stone-600">
                 Welcome to your interactive planner. Based on your "Golden Route" itinerary, this tool helps you explore the balance between modern cities and traditional culture. Navigate through the tabs to visualize your time, plan your meals, and prepare your logistics.
             </p>
-        </div>
+        </div> -->
 
+        <!-- VIEW: LOGISTIC -->
+        <div id="view-logistic" class="block space-y-8 animate-fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Text Content -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h2 class="text-2xl font-bold text-stone-800 mb-4 border-l-4 border-orange-500 pl-3">Flight Details ✈️</h2>
+      
+                        <p class="text-stone-600 mb-6">
+                            This journey follows a north-to-south loop of Honshu's primary cities, utilizing the Shinkansen for efficiency. Explore the key stops below:
+                        </p>
+                        
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h2 class="text-2xl font-bold text-stone-800 mb-4 border-l-4 border-orange-500 pl-3">Accomodation 🏠</h2>
+      
+                        <p class="text-stone-600 mb-6">
+                            This journey follows a north-to-south loop of Honshu's primary cities, utilizing the Shinkansen for efficiency. Explore the key stops below:
+                        </p>
+                        <!-- Interactive City Selector -->
+                        <div class="space-y-4">
+                            <!-- City Cards injected by JS -->
+                            <div id="logistic-list" class="space-y-3"></div>
+                        </div>
+
+                        
+                        <!-- Interactive City Selector -->
+                        <div class="space-y-4">
+                            <!-- City Cards injected by JS -->
+                            <div id="logistic-list" class="space-y-3"></div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 h-full">
+                        <!-- <h3 class="text-lg font-semibold text-stone-800 mb-2">Time Allocation Recommendation</h3>
+                        <p class="text-sm text-stone-500 mb-6">Suggested breakdown of your 14 days to balance sightseeing and travel.</p>
+                        
+                        CHART CONTAINER -->
+                        <!-- <div class="chart-container">
+                            <canvas id="logisticChart"></canvas>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- VIEW: ITINERARY -->
         <div id="view-itinerary" class="block space-y-8 animate-fade-in">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -136,14 +191,6 @@
                 <!-- Visualization -->
                 <div class="lg:col-span-1">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 h-full">
-                        <h3 class="text-lg font-semibold text-stone-800 mb-2">Time Allocation Recommendation</h3>
-                        <p class="text-sm text-stone-500 mb-6">Suggested breakdown of your 14 days to balance sightseeing and travel.</p>
-                        
-                        <!-- CHART CONTAINER -->
-                        <div class="chart-container">
-                            <canvas id="itineraryChart"></canvas>
-                        </div>
-                        
                         <div class="mt-6 bg-blue-50 p-4 rounded-lg">
                             <h4 class="font-bold text-blue-800 text-sm mb-1">🚄 Travel Tip</h4>
                             <p class="text-xs text-blue-700">The <strong>Shinkansen</strong> connects these hubs. A 14-day JR Pass is recommended for seamless travel between Tokyo, Kyoto, Osaka, and Hiroshima/Day Trips.</p>
@@ -153,8 +200,8 @@
             </div>
         </div>
 
-        <!-- VIEW: EXPERIENCES -->
-        <div id="view-experiences" class="hidden space-y-8">
+        <!-- VIEW: CULTURAL TIPS -->
+        <div id="view-cultural-tips" class="hidden space-y-8">
             <div class="max-w-4xl mx-auto text-center mb-8">
                 <h2 class="text-3xl font-bold text-stone-900">Cultural Immersion & Experiences</h2>
                 <p class="mt-2 text-stone-600">The trip prioritizes hands-on cultural moments. Click on the cards below to uncover the essential activities identified in your report.</p>
@@ -190,13 +237,8 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- VIEW: CUISINE -->
-        <div id="view-cuisine" class="hidden space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Menu / List -->
-                <div class="lg:col-span-2">
+            <div class="lg:col-span-2">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
                         <h2 class="text-2xl font-bold text-stone-800 mb-6 border-l-4 border-red-500 pl-3">Culinary Goals</h2>
                         <p class="text-stone-600 mb-6">From street food to refined sushi, here is your checklist of must-try flavors.</p>
@@ -217,12 +259,12 @@
                 </div>
 
                 <!-- Visualization -->
-                <div class="lg:col-span-1">
+                <!-- <div class="lg:col-span-1">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
                         <h3 class="text-lg font-semibold text-stone-800 mb-2">Dining Style Mix</h3>
                         <p class="text-sm text-stone-500 mb-6">Balance your meals between quick bites and sit-down experiences.</p>
                         
-                        <!-- CHART CONTAINER -->
+                         CHART CONTAINER 
                         <div class="chart-container">
                             <canvas id="foodChart"></canvas>
                         </div>
@@ -236,12 +278,29 @@
                              </ul>
                         </div>
                     </div>
+                </div> -->
+        </div>
+
+        <!-- VIEW: CHECKLIST -->
+        <div id="view-checklist" class="hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Packing Checklist -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                    <h2 class="text-xl font-bold text-stone-800 mb-4 flex items-center">
+                        <span class="bg-blue-100 text-blue-700 p-2 rounded-full mr-3">🎒</span> 
+                        Packing Essentials
+                    </h2>
+                    <p class="text-stone-600 text-sm mb-6">Key items mentioned in your summary for smooth travel.</p>
+                    
+                    <ul class="space-y-3" id="packing-list">
+                        <!-- JS injected -->
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW: LOGISTICS -->
-        <div id="view-logistics" class="hidden space-y-8">
+        <!-- VIEW: BUDGET -->
+        <div id="view-budget" class="hidden space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 
                 <!-- Budgeting Tool -->
@@ -276,35 +335,6 @@
                         <p class="text-yellow-700 text-xs mt-1">Remember that many smaller shops, temples, and restaurants still only accept cash (Yen). Always carry sufficient notes.</p>
                     </div>
                 </div>
-
-                <!-- Packing Checklist -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
-                    <h2 class="text-xl font-bold text-stone-800 mb-4 flex items-center">
-                        <span class="bg-blue-100 text-blue-700 p-2 rounded-full mr-3">🎒</span> 
-                        Packing Essentials
-                    </h2>
-                    <p class="text-stone-600 text-sm mb-6">Key items mentioned in your summary for smooth travel.</p>
-                    
-                    <ul class="space-y-3" id="packing-list">
-                        <!-- JS injected -->
-                    </ul>
-                </div>
-
-                <!-- Budget Viz -->
-                <div class="md:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-100">
-                    <h3 class="text-lg font-bold text-stone-800 mb-4">Estimated Budget Distribution</h3>
-                    <div class="flex flex-col md:flex-row items-center justify-around">
-                        <div class="chart-container" style="max-height: 250px; max-width: 400px;">
-                            <canvas id="budgetChart"></canvas>
-                        </div>
-                        <div class="mt-6 md:mt-0 max-w-sm">
-                            <p class="text-sm text-stone-600">
-                                This chart illustrates a typical budget breakdown for a mid-range traveler. Note that the <strong>JR Pass</strong> is a significant upfront transport cost, while accommodation and food will vary by city.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -349,6 +379,26 @@
                         desc: "Nara Park (Deer & Todai-ji), Hakone or Kawaguchiko (Mt Fuji views)." 
                     }
                 ],
+                logisticData: [
+                    { 
+                        city: "Flat 1 - Tokyo", 
+                        days: 5,
+                        tags: ["Modernity", "Pop Culture", "Nightlife"],
+                        desc: "Shibuya Crossing, Meiji Jingu Shrine, Senso-ji Temple, Shinjuku (Golden Gai). The electric capital." 
+                    },
+                    { 
+                        city: "Flat 2 - Kyoto", 
+                        days: 5,
+                        tags: ["Tradition", "History", "Arts"],
+                        desc: "Fushimi Inari Taisha (Torii Gates), Kinkaku-ji (Golden Pavilion), Arashiyama Bamboo Grove, Gion District." 
+                    },
+                    { 
+                        city: "Flat 3 - Osaka", 
+                        days: 2,
+                        tags: ["Food", "Entertainment"],
+                        desc: "Dotonbori for street food, Osaka Castle. The kitchen of Japan." 
+                    }
+                ],
                 experiences: [
                     { title: "Ryokan Stay", icon: "🛌", desc: "Sleep on tatami mats and enjoy traditional hospitality.", type: "Accommodation" },
                     { title: "Onsen", icon: "♨️", desc: "Relax in a natural hot spring bath (naked, gender-separated).", type: "Wellness" },
@@ -373,6 +423,7 @@
             },
 
             init: function() {
+                this.renderLogistic();
                 this.renderItinerary();
                 this.renderExperiences();
                 this.renderFood(this.state.food); // Initial render all
@@ -416,6 +467,20 @@
                         <div class="flex flex-wrap gap-2 mt-2 mb-2">
                             ${dest.tags.map(tag => `<span class="text-[10px] uppercase tracking-wider bg-orange-100 text-orange-700 px-2 py-0.5 rounded">${tag}</span>`).join('')}
                         </div>
+                        <p class="text-sm text-stone-600 mt-2">${dest.desc}</p>
+                    </div>
+                `).join('');
+            },
+
+            renderLogistic: function() {
+                const container = document.getElementById('logistic-list');
+                container.innerHTML = this.state.logisticData.map(dest => `
+                    <div class="interactive-card bg-stone-50 p-4 rounded-lg border-l-4 border-stone-300 hover:border-orange-500 hover:bg-white transition-all duration-200">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg text-stone-800">${dest.city}</h3>
+                            <span class="text-xs font-semibold bg-stone-200 text-stone-600 px-2 py-1 rounded-full">~${dest.days} Days</span>
+                        </div>
+                       
                         <p class="text-sm text-stone-600 mt-2">${dest.desc}</p>
                     </div>
                 `).join('');
