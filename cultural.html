@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultural Tips - JapanPlan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <span class="text-2xl font-bold text-stone-800">🇯🇵 Japan<span class="text-orange-600">Plan</span></span>
+            <nav class="hidden md:flex space-x-8">
+                <a href="itinerary.html" class="nav-link">Itinerary</a>
+                <a href="logistic.html" class="nav-link">Logistic</a>
+                <a href="cultural.html" class="nav-link nav-active">Cultural Tips</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-stone-900">Cultural Immersion</h1>
+            <p class="text-stone-600">Essential etiquette and culinary goals for your journey.</p>
+        </div>
+
+        <div class="bg-indigo-50 rounded-2xl p-8 mb-12">
+            <h3 class="text-xl font-bold text-indigo-900 mb-6 text-center">🇯🇵 Essential Etiquette</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <div class="text-2xl mb-2">💴</div>
+                    <h4 class="font-bold">Tipping</h4>
+                    <p class="text-sm text-gray-600">Tipping is not practiced in Japan. Good service is the standard.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <div class="text-2xl mb-2">🤫</div>
+                    <h4 class="font-bold">Public Space</h4>
+                    <p class="text-sm text-gray-600">Keep noise levels low on trains and avoid talking on phones.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <div class="text-2xl mb-2">👟</div>
+                    <h4 class="font-bold">Footwear</h4>
+                    <p class="text-sm text-gray-600">Remove shoes at temples and Ryokans. Use the provided slippers!</p>
+                </div>
+            </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="experience-grid">
+        </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <div class="text-2xl mb-2">🔌</div>
+                    <h4 class="font-bold">Socket</h4>
+                    <p class="text-sm text-gray-600">Most of the time type A plug. Don't forget adapter.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <div class="text-2xl mb-2">💴</div>
+                    <h4 class="font-bold">Cash</h4>
+                    <p class="text-sm text-gray-600">Remember that many smaller shops, temples, and restaurants still only accept cash (Yen).</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <div class="text-2xl mb-2">🤫</div>
+                    <h4 class="font-bold">Public Space</h4>
+                    <p class="text-sm text-gray-600">Keep noise levels low on trains and avoid talking on phones.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+            <h2 class="text-2xl font-bold text-stone-800 mb-6 border-l-4 border-red-500 pl-3">Culinary Goals</h2>
+            <div class="flex space-x-2 mb-6 overflow-x-auto">
+                <button onclick="filterFood('all')" class="px-4 py-2 bg-stone-100 rounded-full text-xs font-bold">All</button>
+                <button onclick="filterFood('Noodle')" class="px-4 py-2 bg-stone-100 rounded-full text-xs font-bold">Noodles</button>
+                <button onclick="filterFood('Street Food')" class="px-4 py-2 bg-stone-100 rounded-full text-xs font-bold">Street Food</button>
+                <button onclick="filterFood('Seafood')" class="px-4 py-2 bg-stone-100 rounded-full text-xs font-bold">Seafood</button>
+            </div>
+            <div id="food-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+        </div>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-400 py-6 text-center text-sm">
+        © 2026 Japan Adventure Planner
+    </footer>
+</body>
+</html>
