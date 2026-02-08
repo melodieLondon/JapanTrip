@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics - JapanPlan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
+            <span class="text-2xl font-bold text-stone-800">🇯🇵 Japan<span class="text-orange-600">Plan</span></span>
+            <nav class="hidden md:flex space-x-8">
+                <a href="itinerary.html" class="nav-link">Itinerary</a>
+                <a href="logistic.html" class="nav-link nav-active">Logistic</a>
+                <a href="cultural.html" class="nav-link">Cultural Tips</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                <h2 class="text-2xl font-bold text-stone-800 mb-4 border-l-4 border-orange-500 pl-3">Flight Details</h2>
+                <div class="overflow-x-auto">
+                    <table class="text-sm">
+                        <thead>
+                            <tr class="bg-stone-50">
+                                <th>Route</th>
+                                <th>Flight</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Seats</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>LGW → KIX</td>
+                                <td>XXXX</td>
+                                <td>Fri 23 Oct - 18:40</td>
+                                <td>Sat 24 Oct - 18:00</td>
+                                <td class="text-left text-xs">Adina, Maria, Melo, Oksi</td>
+                                <td rowspan="2" class="font-bold">£703</td>
+                            </tr>
+                            <tr>
+                                <td>HND → LGW</td>
+                                <td>XXXX</td>
+                                <td>Sat 7 Nov - 17:10</td>
+                                <td>Sun 8 Nov - 06:30</td>
+                                <td class="text-left text-xs">Adina, Maria, Melo, Oksi</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-2xl font-bold text-stone-800 mb-4 border-l-4 border-orange-500 pl-3">Converter</h2>
+                        <button onclick="toggleCurrencyDirection()" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-600 px-2 py-1 rounded transition">
+                            Swap ⇄
+                        </button>
+                    </div>
+                    <p class="text-stone-400 text-xs mb-4" id="rate-text">Rate: £1 = ¥206.82</p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label id="input-label" class="block text-xs font-semibold text-stone-500 uppercase mb-1">Pounds (£)</label>
+                            <input type="number" id="currency-input" placeholder="0.00" class="w-full p-2 border border-stone-200 rounded-lg focus:ring-2 focus:ring-green-500 outline-none" oninput="handleConversion()">
+                        </div>
+                        <div>
+                            <label id="output-label" class="block text-xs font-semibold text-stone-500 uppercase mb-1">Yen (¥)</label>
+                            <div id="currency-output" class="w-full p-2 bg-stone-50 border border-stone-100 rounded-lg text-stone-800 font-mono font-bold text-lg">
+                                ¥ 0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+            <h2 class="text-2xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-3">Accommodation 🏠</h2>
+            <div id="logistic-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                </div>
+        </div>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-400 py-6 text-center text-sm">
+        © 2026 Japan Adventure Planner
+    </footer>
+</body>
+</html>

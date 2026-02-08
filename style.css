@@ -1,0 +1,69 @@
+/* Custom Styles for Japan Adventure Planner */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #fafaf9; /* Stone 50 */
+    color: #44403c; /* Stone 700 */
+}
+
+/* Navigation Styles */
+.nav-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    color: #78716c;
+}
+
+.nav-link:hover {
+    color: #ea580c;
+}
+
+.nav-active {
+    border-bottom: 2px solid #ea580c;
+    color: #ea580c;
+    font-weight: 600;
+}
+
+/* Card Effects */
+.interactive-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.interactive-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styling for Flights and Budget */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background-color: #f8fafc;
+}
+
+.packed-text {
+    text-decoration: line-through;
+    color: #a1a1aa;
+}
+
+/* Styling for Itinerary Headings */
+.itinerary-day-title {
+    font-size: 1.1rem; /* Makes the main title smaller */
+    line-height: 1.4;
+}
+
+.itinerary-date-sub {
+    font-size: 0.875rem; /* Smaller size for the date */
+    color: #78716c; /* Stone 500 */
+    font-weight: 400;
+}
