@@ -3,344 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerary - JapanPlan</title>
+    <title>Japan Adventure Planner - Home</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="app.js" defer></script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fafaf9; /* Stone 50 */
+            color: #44403c; /* Stone 700 */
+        }
+
+        .active-tab {
+            border-bottom: 2px solid #ea580c; /* Orange 600 */
+            color: #ea580c;
+            font-weight: 600;
+        }
+
+        .inactive-tab {
+            color: #78716c; /* Stone 500 */
+        }
+
+        .inactive-tab:hover {
+            color: #ea580c;
+        }
+
+        /* Card hover effects */
+        .interactive-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+
 </head>
 <body class="min-h-screen flex flex-col">
 
+    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-            <span class="text-2xl font-bold text-stone-800">🇯🇵 Japan<span class="text-orange-600">Plan</span></span>
-            <nav class="hidden md:flex space-x-8">
-                <a href="index.html" class="nav-link nav-active">Itinerary</a>
-                <a href="logistic.html" class="nav-link">Logistic</a>
-                <a href="cultural.html" class="nav-link">Cultural Tips</a>
-            </nav>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center">
+                    <span class="text-2xl font-bold text-stone-800 tracking-tight">🇯🇵 Japan<span class="text-orange-600">Plan</span></span>
+                </a>
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" id="nav-home" class="active-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Home</a>
+                    <a href="logistic.html" id="nav-logistic" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Logistic</a>
+                    <a href="itinerary.html" id="nav-itinerary" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Itinerary</a>
+                    <a href="cultural-tips.html" id="nav-cultural-tips" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Cultural Tips</a>
+                    <a href="checklist.html" id="nav-checklist" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Checklist</a>
+                </nav>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-stone-500 hover:text-stone-900 focus:outline-none">
+                        Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-orange-600 hover:text-orange-600 hover:bg-stone-50">Home</a>
+                <a href="logistic.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Logistic</a>
+                <a href="itinerary.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Itinerary</a>
+                <a href="cultural-tips.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Cultural Tips</a>
+                <a href="checklist.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Checklist</a>
+            </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-4xl mx-auto px-4 py-12">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-extrabold text-stone-900 mb-2">Japan Trip 2025 - Itinerary</h1>
-            <p class="text-stone-600">13 Days of Modern Wonders & Ancient Traditions</p>
-            <img src="docs/japan_photos/japan-map.jpeg" 
-                alt="Shinjuku and Meiji Shrine" 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">       
-        </header>
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
-        <div class="space-y-12">
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 1: London — Osaka</span>
-                        <span class="text-sm font-medium text-stone-500">(23-24 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>Fri - 18:40</strong> <span>Departure from London Heatrow.</span></li>
-                        <li class="flex gap-4"><strong>Sat - 18:00</strong> <span>Arrival at Osaka</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/plane.webp"
-                        alt="Asakusa and Shibuya" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 2: Discover Osaka</span>
-                        <span class="text-sm font-medium text-stone-500">(25 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><span>Osaka Castle area</span></li>
-                        <li class="flex gap-4"><span>Umeda Sky Building views before sunset</span></li>
-                        <li class="flex gap-4"><strong>Evening</strong><span>Dotonbori, Amerikamura, then Namba Yasaka Shrine.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/neon-street.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 3: Discover Osaka</span>
-                        <span class="text-sm font-medium text-stone-500">(26 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Late morning: Kuromon Ichiba Market</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/shinsekai.jpg" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 4: Train to Kyoto</span>
-                        <span class="text-sm font-medium text-stone-500">(27 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/nishiki-market.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 5: Kyoto</span>
-                        <span class="text-sm font-medium text-stone-500">(28 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/gion.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 6: Kyoto </span>
-                        <span class="text-sm font-medium text-stone-500">(29 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/bamboo.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 7: Kyoto </span>
-                        <span class="text-sm font-medium text-stone-500">(30 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/neon-street.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 8: Tokyo </span>
-                        <span class="text-sm font-medium text-stone-500">(31 Oct)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/shutterstock_crossing.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-             <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 9: Hakone </span>
-                        <span class="text-sm font-medium text-stone-500">(1 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/onsen.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-             <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 10: Hakone </span>
-                        <span class="text-sm font-medium text-stone-500">(2 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/ropeway.jpg" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-             <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 11: Tokyo </span>
-                        <span class="text-sm font-medium text-stone-500">(3 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/toyko-sensoji-temple.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 12: Tokyo </span>
-                        <span class="text-sm font-medium text-stone-500">(4 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/akihabara.jpg" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 13: Tokyo </span>
-                        <span class="text-sm font-medium text-stone-500">(5 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/toyosu-market-fish.jpg" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 14: Tokyo </span>
-                        <span class="text-sm font-medium text-stone-500">(6 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>10:00</strong> <span>Meiji Jingu Shrine forest walk.</span></li>
-                        <li class="flex gap-4"><strong>13:00</strong> <span>Harajuku street food and crepes.</span></li>
-                        <li class="flex gap-4"><strong>15:00</strong> <span>Tokyo Metropolitan Govt Building (Free Views).</span></li>
-                        <li class="flex gap-4"><strong>20:00</strong> <span>Omoide Yokocho (Piss Alley) for Yakitori.</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/temple.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
-
-            <section class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8 items-start group">
-                <div class="flex-grow">
-                    <h2 class="text-xl font-bold text-stone-800 mb-6 border-l-4 border-orange-500 pl-4">
-                        <span class="block text-base font-semibold text-orange-600 uppercase tracking-wide">Day 15: Way back home </span>
-                        <span class="text-sm font-medium text-stone-500">(7-8 Nov)</span>
-                    </h2>
-                    <ul class="space-y-4 text-stone-700">
-                        <li class="flex gap-4"><strong>Sat - 17:10</strong> <span>Departure from Tokyo</span></li>
-                        <li class="flex gap-4"><strong>Sun - 6:30</strong> <span>Arrival at London</span></li>
-                    </ul>
-                </div>
-                <div class="w-full md:w-72 h-52 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
-                    <img src="docs/japan_photos/plane.webp" 
-                        alt="Shinjuku and Meiji Shrine" 
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                </div>
-            </section>
+        <!-- HERO -->
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <h1 class="text-5xl font-extrabold text-stone-900 mb-3">🇯🇵 Japan Adventure Planner</h1>
         </div>
 
+        <img src="docs/japan_photos/japan-map.jpeg" alt="Japan trip" class="w-full h-64 sm:h-80 object-cover rounded-xl shadow-sm border border-stone-100 mb-12">
 
+        <!-- NAV CARDS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
+            <a href="logistic.html" class="interactive-card bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col items-start">
+                <div class="text-3xl mb-3">✈️</div>
+                <h2 class="text-lg font-bold text-stone-800 mb-1">Logistic</h2>
+                <p class="text-sm text-stone-500">Flights, layovers, and accommodation for the whole trip.</p>
+            </a>
 
+            <a href="itinerary.html" class="interactive-card bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col items-start">
+                <div class="text-3xl mb-3">🗺️</div>
+                <h2 class="text-lg font-bold text-stone-800 mb-1">Itinerary</h2>
+                <p class="text-sm text-stone-500">Day-by-day plan across Tokyo, Kyoto, Osaka and more.</p>
+            </a>
 
+            <a href="cultural-tips.html" class="interactive-card bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col items-start">
+                <div class="text-3xl mb-3">🎎</div>
+                <h2 class="text-lg font-bold text-stone-800 mb-1">Cultural Tips</h2>
+                <p class="text-sm text-stone-500">Experiences to try, etiquette, and food to look out for.</p>
+            </a>
 
-        <div class="mt-12 bg-blue-50 p-6 rounded-xl border border-blue-100">
-            <h4 class="font-bold text-blue-800 mb-1">Any comment to add:</h4>
-            <p class="text-sm text-blue-700">blablablabla balablablabla blablabalba lbalbalbalba blablabalb!</p>
+            <a href="checklist.html" class="interactive-card bg-white p-6 rounded-xl shadow-sm border border-stone-100 flex flex-col items-start">
+                <div class="text-3xl mb-3">🎫</div>
+                <h2 class="text-lg font-bold text-stone-800 mb-1">Checklist</h2>
+                <p class="text-sm text-stone-500">Packing essentials and clothing for the whole trip.</p>
+            </a>
+
         </div>
+
     </main>
 
-    <footer class="bg-stone-800 text-stone-400 py-6 text-center text-sm">
-        © 2026 Japan Adventure Planner
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">Generated for your Japan Adventure Planning. &copy; 2025</p>
+        </div>
     </footer>
+
 </body>
 </html>
