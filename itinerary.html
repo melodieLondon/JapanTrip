@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan Adventure Planner - Itinerary</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fafaf9; /* Stone 50 */
+            color: #44403c; /* Stone 700 */
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        .active-tab {
+            border-bottom: 2px solid #ea580c; /* Orange 600 */
+            color: #ea580c;
+            font-weight: 600;
+        }
+
+        .inactive-tab {
+            color: #78716c; /* Stone 500 */
+        }
+        
+        .inactive-tab:hover {
+            color: #ea580c;
+        }
+
+        /* Card hover effects */
+        .interactive-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Table style */
+       table {
+            width: 100%; /* Increased table width slightly */
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Style for the list inside the cell */
+        td ul {
+            list-style-type: none; 
+            padding: 0;
+            margin: 0;
+        }
+        /* Total Row Styling */
+        tfoot td { 
+            background-color: #e0f7fa; 
+            font-weight: bold; 
+            border-top: 2px solid; 
+            font-size: 1.1em;
+        }
+        /* *** NEW CSS: Making the 'Seats Assigned' column wider *** */
+        .seats-column {
+            width: 15%; /* Assigns 25% of the table's total width to this column */
+        }
+
+        .packed-text {
+            text-decoration: line-through;
+            color: #a1a1aa; /* text-stone-400 */
+        }
+
+        /* Time label used before each itinerary activity, e.g. Morning, 9 AM */
+        .day-time {
+            font-size: 0.875rem; /* text-sm */
+            color: #a8a29e; /* text-stone-400 */
+            font-weight: 300;
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap; /* Allows items to wrap onto the next line */
+            gap: 8px; /* Adds space between items */
+        }
+
+        /* Existing rule updated to remove flex-grow */
+        .input-group input { 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            /* REMOVE: flex-grow: 1; */
+            width: 100%; /* Force inputs to take full width on mobile */
+        }
+
+        /* ADDED: Styling for the button */
+        .input-group button {
+            padding: 10px;
+            background-color: #10b981; /* Tailwind green-500 */
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%; /* Force button to take full width */
+            margin-top: 4px; /* Space below inputs */
+        }
+    </style>
+
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-stone-800 tracking-tight">🇯🇵 Japan<span class="text-orange-600">Plan</span></span>
+                </div>
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" id="nav-home" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Home</a>
+                    <a href="logistic.html" id="nav-logistic" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Logistic</a>
+                    <a href="itinerary.html" id="nav-itinerary" class="active-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Itinerary</a>
+                    <a href="cultural-tips.html" id="nav-cultural-tips" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Cultural Tips</a>
+                    <a href="checklist.html" id="nav-checklist" class="inactive-tab px-1 pt-1 text-sm font-medium focus:outline-none transition duration-150">Checklist</a>
+                </nav>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-stone-500 hover:text-stone-900 focus:outline-none">
+                        Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                 <a href="index.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Home</a>
+                <a href="logistic.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Logistic</a>
+                <a href="itinerary.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-orange-600 hover:text-orange-600 hover:bg-stone-50">Itinerary</a>
+                <a href="cultural-tips.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Cultural Tips</a>
+                <a href="checklist.html" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-orange-600 hover:bg-stone-50">Checklist</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- VIEW: ITINERARY -->
+        <div id="view-itinerary" class="space-y-8">
+           
+        
+                <header class="text-center mb-10">
+                    <h1 class="text-5xl font-extrabold text-gray-900 mb-2">Japan Itinerary</h1>
+                    <p class="text-xl text-gray-600">13-Days Itinerary: Golden Route</p>
+                </header>
+
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                            <span class="mr-3">☀️</span> OSAKA
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mb-10">
+                    <div class="lg:col-span-2">
+                        <h2 class="text-1xl font-bold text-gray-800 mb-4 flex items-center">
+                            Friday 24th Oct : Asakusa & Shibuya
+                        </h2>
+                        <ol class="space-y-4">
+                            <li><span class="day-time">morning 9 AM</span><br> Visit the ancient Senso-ji Temple in Asakusa. Walk down the historic Nakamise-dori street for souvenirs.</li>
+                            <li><span class="day-time">lunch 1 PM</span><br> Enjoy a traditional tempura or soba lunch near the temple.</li>
+                            <li><span class="day-time">afternoon 3 PM</span> <br> Head to Shibuya. Cross the iconic Shibuya Scramble Crossing.</li>
+                            <li><span class="day-time">evening 7 PM</span><br> Dinner in Shibuya. Find a spot overlooking the crossing or explore the lively Nonbei Yokocho (Drunkard's Alley).</li>
+                        </ol>
+                    </div>
+                    <img src="docs/japan_photos/neon-street.webp" alt="Day 1: Asakusa & Shibuya" class="w-full h-full min-h-[220px] object-cover rounded-xl shadow-sm border border-stone-100">
+                </div>
+                <hr class="my-8 border-t border-stone-200">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mb-10">
+                    <div class="lg:col-span-2">
+                        <h2 class="text-1xl font-bold text-gray-800 mb-4 flex items-center">
+                            Saturday 25th : Shinjuku & Meiji Shrine
+                        </h2>
+                        <ol class="space-y-4">
+                            <li><span class="day-time">morning 10 AM</span> <br> Find tranquility at the Meiji Jingu Shrine, a large forest sanctuary dedicated to Emperor Meiji.</li>
+                            <li><span class="day-time">lunch 1 PM</span><br> Explore Harajuku (next to Meiji Shrine). Grab a quirky crepe or a stylish bowl of ramen.</li>
+                            <li><span class="day-time">afternoon 3 PM</span><br> Go up the Tokyo Metropolitan Government Building in Shinjuku for free city views.</li>
+                            <li><span class="day-time">evening 8 PM</span><br> Experience Shinjuku's nightlife. Visit Golden Gai for tiny, atmospheric bars or **Omoide Yokocho** (Piss Alley) for grilled skewers.</li>
+                        </ol>
+                    </div>
+                    <img src="docs/japan_photos/meiji-jingu.jpg" alt="Day 2: Shinjuku & Meiji Shrine" class="w-full h-full min-h-[220px] object-cover rounded-xl shadow-sm border border-stone-100">
+                </div>
+                <hr class="my-8 border-t border-stone-200">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mb-10">
+                    <div class="lg:col-span-2">
+                        <h2 class="text-1xl font-bold text-gray-800 mb-4 flex items-center">
+                            Sunday 26th : Akihabara & Ginza
+                        </h2>
+                        <ol class="space-y-4">
+                            <li><span class="day-time">morning 11 AM</span><br> Dive into Akihabara, the electric town. Explore electronics, anime, and gaming shops.</li>
+                            <li><span class="day-time">lunch 1 PM</span><br> Find a themed café or a fast-casual eatery in Akihabara.</li>
+                            <li><span class="day-time">afternoon 3 PM</span><br> Switch gears and explore the upscale district of Ginza for high-end shopping and architecture.</li>
+                            <li><span class="day-time">evening 6 PM</span><br> View the city from the Tokyo Skytree or Tokyo Tower, followed by a final dinner. </li>
+                        </ol>
+                    </div>
+                    <img src="docs/japan_photos/akihabara.jpg" alt="Day 3: Akihabara & Ginza" class="w-full h-full min-h-[220px] object-cover rounded-xl shadow-sm border border-stone-100">
+                </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100 h-full">
+                            <h4 class="font-bold text-blue-800 text-sm mb-1">🚄 Travel Tip</h4>
+                            <p class="text-xs text-blue-700">The <strong>Shinkansen</strong> connects these hubs. A 14-day JR Pass is recommended for seamless travel between Tokyo, Kyoto, Osaka, and Hiroshima/Day Trips.</p>
+                    </div>
+
+    </div>
+            
+
+
+    </main>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-stone-300 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">Generated for your Japan Adventure Planning. &copy; 2025</p>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+
+</body>
+</html>
